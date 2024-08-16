@@ -35,9 +35,14 @@ private:
 	UPROPERTY(EditAnywhere)
 	float MaxDrivingForce = 10000.0f;
 
+	// Deprecated
 	// The number of degrees rotated second at full control throw (degrees/s)
 	UPROPERTY(EditAnywhere)
 	float MaxDegreesPerSecond = 90.0f;
+
+	// Minimum radius of the car turning circle at full lock (m)
+	UPROPERTY(EditAnywhere)
+	float MinTurningRadius = 10.0f;
 
 	// Higher means more drag (16 = 10000 / 25^2)
 	UPROPERTY(EditAnywhere)
