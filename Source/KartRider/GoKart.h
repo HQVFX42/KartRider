@@ -29,26 +29,30 @@ public:
 private:
 	// The mass of the car (kg)
 	UPROPERTY(EditAnywhere)
-	float Mass = 1000;
+	float Mass = 1000.0f;
 
 	// The force applied to the car when the throttle is fully down (N)
 	UPROPERTY(EditAnywhere)
-	float MaxDrivingForce = 10000;
+	float MaxDrivingForce = 10000.0f;
 
 	// The number of degrees rotated second at full control throw (degrees/s)
 	UPROPERTY(EditAnywhere)
-	float MaxDegreesPerSecond = 90;
+	float MaxDegreesPerSecond = 90.0f;
 
 	// Higher means more drag (16 = 10000 / 25^2)
 	UPROPERTY(EditAnywhere)
-	float DragCoefficient = 16;
+	float DragCoefficient = 16.0f;
+
+	UPROPERTY(EditAnywhere)
+	float RollingResistanceCoefficient = 0.015f;
 
 	float Throttle;
 	float SteeringThrow;
 
 	FVector Velocity;
 
-	FVector GetResistance();
+	FVector GetAirResistance();
+	FVector GetRollingResistance();
 
 	void ApplyRotation(float DeltaTime);
 
