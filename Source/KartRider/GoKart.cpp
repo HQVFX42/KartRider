@@ -34,6 +34,11 @@ void AGoKart::Tick(float DeltaTime)
 	ApplyRotation(DeltaTime);
 
 	UpdateLocationFromVelocity(DeltaTime);
+
+	FString String;
+	UEnum::GetValueAsString(GetLocalRole(), String);
+
+	DrawDebugString(GetWorld(), FVector(0, 0, 100), String, this, FColor::White, DeltaTime);
 }
 
 FVector AGoKart::GetAirResistance()
@@ -79,8 +84,20 @@ void AGoKart::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("DefaultPawn_MoveForward", this, &AGoKart::Server_MoveForward);
-	PlayerInputComponent->BindAxis("DefaultPawn_MoveRight", this, &AGoKart::Server_MoveRight);
+	PlayerInputComponent->BindAxis("DefaultPawn_MoveForward", this, &AGoKart::MoveForward);
+	PlayerInputComponent->BindAxis("DefaultPawn_MoveRight", this, &AGoKart::MoveRight);
+}
+
+void AGoKart::MoveForward(float Value)
+{
+	Throttle = Value;
+	Server_MoveForward(Value);
+}
+
+void AGoKart::MoveRight(float Value)
+{
+	SteeringThrow = Value;
+	Server_MoveRight(Value);
 }
 
 void AGoKart::Server_MoveForward_Implementation(float Value)
