@@ -35,6 +35,7 @@ struct FGoKartState
 	UPROPERTY()
 	FVector Velocity;
 
+	UPROPERTY()
 	FGoKartMove LastMove;
 };
 
@@ -59,6 +60,18 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	void SimulateMove(FGoKartMove Move);
+
+	FGoKartMove CreateMove(float DeltaTime);
+	void ClearAcknowledgeMoves(FGoKartMove LastMove);
+
+	FVector GetAirResistance();
+	FVector GetRollingResistance();
+
+	void ApplyRotation(float DeltaTime, float InSteeringThrow);
+
+	void UpdateLocationFromVelocity(float DeltaTime);
+
 	// The mass of the car (kg)
 	UPROPERTY(EditAnywhere)
 	float Mass = 1000.0f;
@@ -83,28 +96,22 @@ private:
 	UPROPERTY(EditAnywhere)
 	float RollingResistanceCoefficient = 0.015f;
 
-	FVector Velocity;
-	float Throttle;
-	float SteeringThrow;
-
-	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
-	FGoKartState ServerState;
-
-	UFUNCTION()
-	void OnRep_ServerState();
-
-	void SimultaeMove(FGoKartMove Move);
-
-	FVector GetAirResistance();
-	FVector GetRollingResistance();
-
-	void ApplyRotation(float DeltaTime, float InSteeringThrow);
-
-	void UpdateLocationFromVelocity(float DeltaTime);
-
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_SendMove(FGoKartMove Move);
+
+	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
+	FGoKartState ServerState;
+
+	FVector Velocity;
+
+	UFUNCTION()
+	void OnRep_ServerState();
+
+	float Throttle = 0.0f;
+	float SteeringThrow = 0.0f;
+
+	TArray<FGoKartMove> UnacknowledgedMoves;
 };
