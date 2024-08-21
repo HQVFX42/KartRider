@@ -12,16 +12,16 @@ struct FGoKartMove
 	GENERATED_BODY()
 
 	UPROPERTY()
-	float Throttle;
+	float Throttle = 0.0f;
 
 	UPROPERTY()
-	float SteeringThrow;
+	float SteeringThrow = 0.0f;
 
 	UPROPERTY()
-	float DeltaTime;
+	float DeltaTime = 0.0f;
 
 	UPROPERTY()
-	float Time;
+	float Time = 0.0f;
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -100,7 +100,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float RollingResistanceCoefficient = 0.015f;
 
-	FVector Velocity;
+	FVector Velocity = FVector::ZeroVector;
 
 	float Throttle = 0.0f;
 	float SteeringThrow = 0.0f;
