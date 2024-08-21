@@ -86,6 +86,8 @@ private:
 	FTransform ClientStartTransform;
 	FVector ClientStartVelocity;
 
+	float ClientSimulatedTime;
+
 	UPROPERTY()
 	UGoKartMovementComponent* MovementComponent;
 
@@ -95,5 +97,5 @@ private:
 	void SetMeshOffsetRoot(USceneComponent* Root)
 	{
 		MeshOffsetRoot = Root;
-	};
+	}
 };

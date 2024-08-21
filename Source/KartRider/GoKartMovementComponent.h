@@ -22,6 +22,11 @@ struct FGoKartMove
 
 	UPROPERTY()
 	float Time = 0.0f;
+
+	bool IsValid() const
+	{
+		return FMath::Abs(Throttle) <= 1 and FMath::Abs(SteeringThrow) <= 1;
+	}
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
