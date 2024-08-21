@@ -22,6 +22,23 @@ struct FGoKartState
 	FGoKartMove LastMove;
 };
 
+struct FHermiteCubicSpline
+{
+	FVector StartLocation = FVector::ZeroVector;
+	FVector StartDerivative = FVector::ZeroVector;
+	FVector TargetLocation = FVector::ZeroVector;
+	FVector TargetDerivative = FVector::ZeroVector;
+	
+	FVector InterpolateLocation(float LerpRatio) const
+	{
+		return FMath::CubicInterp(StartLocation, StartDerivative, TargetLocation, TargetDerivative, LerpRatio);
+	};
+	FVector InterpolateDerivative(float LerpRatio) const
+	{
+		return FMath::CubicInterpDerivative(StartLocation, StartDerivative, TargetLocation, TargetDerivative, LerpRatio);
+	};
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class KARTRIDER_API UGoKartMovementReplicator : public UActorComponent
 {
@@ -45,6 +62,11 @@ private:
 	void UpdateServerState(const FGoKartMove& Move);
 
 	void ClientTick(float DeltaTime);
+	FHermiteCubicSpline CreateSpline();
+	void InterpolateLocation(const FHermiteCubicSpline& Spline, float LerpRatio);
+	void InterpolateVelocity(const FHermiteCubicSpline& Spline, float LerpRatio);
+	void InterpolateRotation(float LerpRatio);
+	float VelocityToDerivative();
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_SendMove(FGoKartMove Move);
@@ -66,4 +88,12 @@ private:
 
 	UPROPERTY()
 	UGoKartMovementComponent* MovementComponent;
+
+	UPROPERTY()
+	USceneComponent* MeshOffsetRoot;
+	UFUNCTION(BlueprintCallable)
+	void SetMeshOffsetRoot(USceneComponent* Root)
+	{
+		MeshOffsetRoot = Root;
+	};
 };
